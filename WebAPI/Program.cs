@@ -1,8 +1,14 @@
+using WebAPI.Services;
+using WebAPI.Services.Impl;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+//builder.Services.AddSingleton<MathService>();
+builder.Services.AddScoped<IPersonServices, PersonServicesImpl>();
 
 var app = builder.Build();
 
