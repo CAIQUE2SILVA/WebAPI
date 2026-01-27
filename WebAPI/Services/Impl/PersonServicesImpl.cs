@@ -1,56 +1,56 @@
 ﻿using WebAPI.Model;
+using WebAPI.Model.Context;
 
 namespace WebAPI.Services.Impl
 {
     public class PersonServicesImpl : IPersonServices
 
     {
+        private MSSQLContext _context;
 
-
-    public Person FindById(long id)
+        public PersonServicesImpl(MSSQLContext context)
         {
-            var person = MockPerson((int)id);
-            return person;
+            _context = context;
         }
+
         public List<Person> FindAll()
         {
-            List<Person> persons = new List<Person>();
-            for (int i = 0; i < 8; i++)
-            {
-                persons.Add(MockPerson(i));
-            }
-            return persons;
+            return _context.Persons.ToList();
         }
+        public Person FindById(long id)
+        {
+            return _context.Persons.Find(id);
+        }
+
 
         public Person Create(Person person)
         {
+           _context.Add(person);
+            _context.SaveChanges();
             return person;
         }
         public Person Update(Person person)
         {
-            person.Id = new Random().Next(1, 1000);
+            var existingPerson = _context.Persons.Find(person.Id);
+            if (existingPerson == null)
+            {
+                return null;
+            }
+            _context.Entry(existingPerson).CurrentValues.SetValues(person);
+            _context.SaveChanges();
             return person;
         }
 
         public void Delete(long id)
         {
-            // No implementation needed for this example
-        }
-
-        private Person MockPerson(int i )
-        {
-            var person = new Person
+            var existingPerson = _context.Persons.Find(id);
+            if (existingPerson != null)
             {
-                Id = new Random().Next(1, 1000),
-                FristName = "Caique " + i,
-                LastName = "Silva " + i,
-                Address = "São Paulo - SP - Brasil " + i,
-                Gender = "Male "
-            };
-            return person;
+                _context.Persons.Remove(existingPerson);
+                _context.SaveChanges();
+            }
+            return;
         }
-
-
 
     }
 }
