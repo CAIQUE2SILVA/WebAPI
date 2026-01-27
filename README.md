@@ -118,3 +118,33 @@ Este projeto está sob a licença **MIT**. Consulte o arquivo [LICENSE](LICENSE)
 ---
 
 **Desenvolvido com ❤️ por Caique Silva**
+
+## 🔄 Sincronização com Banco de Dados
+
+O projeto agora conta com sincronização completa com banco de dados, permitindo:
+
+- **Persistência de dados**: Armazenamento seguro de informações em banco de dados SQL
+- **Operações CRUD**: Create, Read, Update e Delete totalmente funciais
+- **Entity Framework**: Utilizando EF Core para ORM (Object-Relational Mapping)
+- **Migrations**: Controle de versão do esquema do banco de dados
+- **Connection String**: Configuração flexível de conexão com diferentes SGBDs
+
+### Configuração do Banco de Dados
+
+Para configurar o banco de dados em seu ambiente, edite o arquivo `appsettings.json`:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=seu_servidor;Database=WebAPI;User Id=seu_usuario;Password=sua_senha;"
+  }
+}
+```
+
+### Executar Migrations
+
+Para aplicar as migrations e criar/atualizar o esquema do banco:
+
+```bash
+dotnet ef database update
+```
