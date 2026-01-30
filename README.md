@@ -113,7 +113,6 @@ Este projeto está sob a licença **MIT**. Consulte o arquivo [LICENSE](LICENSE)
 ## 📧 Contato
 
 - **GitHub:** [@CAIQUE2SILVA](https://github.com/CAIQUE2SILVA)
-- **LinkedIn:** [Seu LinkedIn]
 
 ---
 
