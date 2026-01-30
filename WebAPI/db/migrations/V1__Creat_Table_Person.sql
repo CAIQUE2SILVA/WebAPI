@@ -1,3 +1,4 @@
+
 CREATE TABLE dbo.person(
 	[id] bigint NOT NULL IDENTITY,
 	[frist_name] nvarchar(80) NOT NULL,

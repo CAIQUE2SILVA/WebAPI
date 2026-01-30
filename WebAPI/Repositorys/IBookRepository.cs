@@ -1,0 +1,16 @@
+﻿using WebAPI.Model;
+
+namespace WebAPI.Repositorys
+{
+    public interface IBookRepository
+    {
+        Book Create(Book book);
+
+        Book Update(Book book);
+
+        Book FindById(long id);
+        List<Book> FindAll();
+
+        void Delete(long id);
+    }
+}

@@ -1,56 +1,42 @@
 ﻿using WebAPI.Model;
-using WebAPI.Model.Context;
+using WebAPI.Repositorys;
 
 namespace WebAPI.Services.Impl
 {
     public class PersonServicesImpl : IPersonServices
 
-    {
-        private MSSQLContext _context;
+        {
 
-        public PersonServicesImpl(MSSQLContext context)
-        {
-            _context = context;
-        }
+            private IPersonRepository _repository;
 
-        public List<Person> FindAll()
-        {
-            return _context.Persons.ToList();
-        }
-        public Person FindById(long id)
-        {
-            return _context.Persons.Find(id);
-        }
-
-
-        public Person Create(Person person)
-        {
-           _context.Add(person);
-            _context.SaveChanges();
-            return person;
-        }
-        public Person Update(Person person)
-        {
-            var existingPerson = _context.Persons.Find(person.Id);
-            if (existingPerson == null)
+            public PersonServicesImpl(IPersonRepository repository)
             {
-                return null;
+                _repository = repository;
             }
-            _context.Entry(existingPerson).CurrentValues.SetValues(person);
-            _context.SaveChanges();
-            return person;
-        }
 
-        public void Delete(long id)
-        {
-            var existingPerson = _context.Persons.Find(id);
-            if (existingPerson != null)
+            public List<Person> FindAll()
             {
-                _context.Persons.Remove(existingPerson);
-                _context.SaveChanges();
+                return _repository.FindAll();
             }
-            return;
+
+            public Person FindById(long id)
+            {
+                return _repository.FindById(id);
+            }
+
+            public Person Create(Person person)
+            {
+                return _repository.Create(person);
+            }
+
+            public Person Update(Person person)
+            {
+                return _repository.Update(person);
+            }
+            public void Delete(long id)
+            {
+                _repository.Delete(id);
+            }
         }
 
     }
-}
