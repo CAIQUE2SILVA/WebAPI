@@ -1,26 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebAPI.Model.Base;
 
 namespace WebAPI.Model
 {
-
     [Table("books")]
-    public class Book
+    public class Book : BaseEntidy
     {
-        [Key]
-        [Column("id")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
-        public long Id { get; set; }
-        
-        [Required]
-        [Column("title")]
+        [Column("title", TypeName = "varchar(MAX)")]
         public string Title { get; set; }
 
         [Required]
-        [Column("author", TypeName= "varchar(MAX)")]
+        [Column("author", TypeName = "varchar(MAX)")]
         public string Author { get; set; }
-        [MaxLength(200)]
 
         [Required]
         [Column("price")]
@@ -28,6 +21,6 @@ namespace WebAPI.Model
 
         [Required]
         [Column("launch_date")]
-        public DateTime Launch_date { get; set; }
+        public DateTime LaunchDate { get; set; }
     }
 }

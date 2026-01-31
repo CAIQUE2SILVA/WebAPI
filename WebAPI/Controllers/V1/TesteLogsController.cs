@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace WebAPI.Controllers
+namespace WebAPI.Controllers.V1
 {
     [ApiController]
-    [Route("api/[Controller]")]
+    [Route("api/[Controller]/v1")]
 
     public class TesteLogsController : ControllerBase
     {

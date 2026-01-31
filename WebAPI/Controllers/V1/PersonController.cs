@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using WebAPI.Model;
+using WebAPI.Data.DTO.V1;
 using WebAPI.Services;
 
-namespace WebAPI.Controllers
+namespace WebAPI.Controllers.V1
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/v1")]
+    [Produces("application/json")]
+
 
     public class PersonController : ControllerBase
     {
@@ -19,6 +21,10 @@ namespace WebAPI.Controllers
             _logger = logger;
         }
         [HttpGet]
+        [ProducesResponseType(200,Type = typeof(List<PersonDTO>))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+
         public IActionResult Get()
         {
             _logger.LogInformation("Getting all persons");
@@ -26,6 +32,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(200, Type = typeof(PersonDTO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public IActionResult Get(long id)
         {            
             _logger.LogInformation("Getting person with id {Id}", id);
@@ -39,33 +48,42 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Person person)
+        [ProducesResponseType(200, Type = typeof(PersonDTO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public IActionResult Post([FromBody] PersonDTO person)
         {
             _logger.LogInformation("Creating a new person" );
             var createdPerson = _personServices.Create(person);
             if (createdPerson == null)
             {
-                _logger.LogWarning("Failed to create person: {fristName}", person.FristName);
+                _logger.LogWarning("Failed to create person: {fristName}", person.FirstName);
                 return NotFound();
             }
             return Ok(createdPerson);
         }
         [HttpPut]
-        public IActionResult Put([FromBody] Person person)
+        [ProducesResponseType(200, Type = typeof(PersonDTO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public IActionResult Put([FromBody] PersonDTO person)
         {
             _logger.LogInformation("Updating person with id {Id}", person.Id);
-            var createdPerson = _personServices.Create(person);
-            if (createdPerson == null)
+            var updatedPerson = _personServices.Update(person);
+            if (person == null)
             {
                 _logger.LogWarning("Failed to update person with id {Id}", person.Id);
                 return NotFound();
 
             }
             _logger.LogInformation("Person with id {Id} updated successfully", person.Id);
-            return Ok(createdPerson);
+            return Ok(person);
         }
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{id:long}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public IActionResult Delete(long id)
         {
             _logger.LogInformation("Deleting person with id {Id}", id);
             _personServices.Delete(id);

@@ -2,8 +2,6 @@ using WebAPI.Configurantions;
 using WebAPI.Services;
 using WebAPI.Services.Impl;
 using WebAPI.Repositorys.Impl;
-using WebAPI.Model.Context;
-using Microsoft.EntityFrameworkCore;
 using WebAPI.Repositorys;
 
 
@@ -14,18 +12,24 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddSerilogLogging();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddContentNegotiation();
 
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddOpenApiConfig();
+builder.Services.AddSwaggerConfig();
+builder.Services.AddRouteConfig();
 
 builder.Services.AddDatabaseConfiguration(builder.Configuration);
 builder.Services.AddEvolveConfiguration(builder.Configuration, builder.Environment);
 
 
 builder.Services.AddScoped<IPersonServices, PersonServicesImpl>();
-builder.Services.AddScoped<IPersonRepository, PersonRepository>();
-
 builder.Services.AddScoped<IBookServices, BookSevicesImpl>();
-builder.Services.AddScoped<IBookRepository, BoockRepository>();
+
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
 
 
 var app = builder.Build();
@@ -37,5 +41,9 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseSwaggerSpecification();
+
+app.UseScalarConfiguration();
 
 app.Run();

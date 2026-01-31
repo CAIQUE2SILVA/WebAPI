@@ -1,7 +1,7 @@
 
 CREATE TABLE dbo.person(
 	[id] bigint NOT NULL IDENTITY,
-	[frist_name] nvarchar(80) NOT NULL,
+	[first_name] nvarchar(80) NOT NULL,
 	[last_name] nvarchar(80) NOT NULL,
 	[address] nvarchar(200) NOT NULL,
 	[gender] varchar(6) NOT NULL,
