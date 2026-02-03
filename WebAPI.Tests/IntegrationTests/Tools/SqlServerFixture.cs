@@ -19,8 +19,8 @@ namespace WebAPI.Tests.IntegrationTests.Tools
 
         public async Task InitializeAsync()
         {
-            await Container.StartAsync();
-            EvolveConfig.ExcuteMigrations(ConnectionString);
+            //await Container.StartAsync();
+            //EvolveConfig.ExcuteMigrations(ConnectionString);
         }
 
         public async Task DisposeAsync()
