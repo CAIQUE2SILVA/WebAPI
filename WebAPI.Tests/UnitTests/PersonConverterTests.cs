@@ -4,7 +4,7 @@ using WebAPI.Data.DTO.V1;
 using WebAPI.Model;
 using Xunit;
 
-namespace WebAPI.Tests
+namespace WebAPI.Tests.UnitTests
 {
     public class PersonConverterTests
     {

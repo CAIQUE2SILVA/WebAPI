@@ -23,13 +23,8 @@ namespace WebAPI.Configurantions
 
             try
             {
-                using var evolveConnection = new SqlConnection(connectionString);
-                var evolve = new Evolve(evolveConnection, msg => Log.Information(msg))
-                {
-                    Locations = new List<string> { "db/migrations", "db/dataset" },
-                    IsEraseDisabled = true,
-                };
-                evolve.Migrate();
+                ExcuteMigrations(connectionString);
+
             }
             catch (Exception ex)
             {
@@ -39,6 +34,26 @@ namespace WebAPI.Configurantions
 
             return services;
         }
-    }
 
- }
+            public static void ExcuteMigrations(string connectionString)
+            {
+             try
+             {
+                using var evolveConnection = new SqlConnection(connectionString);
+                var evolve = new Evolve(evolveConnection, msg => Log.Information(msg))
+                {
+                    Locations = new List<string> { "db/migrations", "db/dataset" },
+                    IsEraseDisabled = true,
+                };
+                evolve.Migrate();
+
+            }
+            catch (Exception ex) { }
+
+
+            }
+    }
+}
+
+
+
