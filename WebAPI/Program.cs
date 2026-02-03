@@ -20,6 +20,8 @@ builder.Services.AddOpenApiConfig();
 builder.Services.AddSwaggerConfig();
 builder.Services.AddRouteConfig();
 
+builder.Services.AddCorsConfiguration(builder.Configuration);
+
 builder.Services.AddDatabaseConfiguration(builder.Configuration);
 builder.Services.AddEvolveConfiguration(builder.Configuration, builder.Environment);
 
@@ -39,6 +41,10 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseRouting();
+
+app.UseCorsConfiguration();
 
 app.MapControllers();
 

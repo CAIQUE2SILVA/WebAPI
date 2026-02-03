@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using WebAPI.Data.DTO.V1;
 using WebAPI.Services;
@@ -8,6 +9,7 @@ namespace WebAPI.Controllers.V1
     [ApiController]
     [Route("api/[controller]/v1")]
     [Produces("application/json")]
+    //[EnableCors("Development")]
 
 
     public class PersonController : ControllerBase
