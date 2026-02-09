@@ -27,6 +27,9 @@ namespace WebAPI.Model
         [MaxLength(6)]
         public string Gender { get; set; }
 
+        [Column("enabled")]
+        public bool Enabled { get; set; }
+
         //[NotMapped]
         //public DateTime? BirthDay { get; set; }
     }

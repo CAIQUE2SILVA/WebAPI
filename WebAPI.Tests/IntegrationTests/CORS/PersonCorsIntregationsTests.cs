@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace WebAPI.Tests.IntegrationTests.CORS
 {
-    internal class PersonCorsIntregationsTests
+    public class PersonCorsIntregationsTests : IClassFixture<>
     {
+
     }
 }

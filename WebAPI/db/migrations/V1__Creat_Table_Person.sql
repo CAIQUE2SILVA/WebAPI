@@ -7,3 +7,6 @@ CREATE TABLE dbo.person(
 	[gender] varchar(6) NOT NULL,
 	PRIMARY KEY ([id])
 )
+
+	ALTER TABLE dbo.person
+	ADD enabled BIT NOT NULL DEFAULT 1;

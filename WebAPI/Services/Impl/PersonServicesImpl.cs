@@ -1,7 +1,9 @@
-﻿using WebAPI.Data.Converter.Impl;
+﻿using Mapster;
+using WebAPI.Data.Converter.Impl;
 using WebAPI.Data.DTO.V1;
 using WebAPI.Model;
 using WebAPI.Repositorys;
+using WebAPI.Repositorys.Impl;
 
 namespace WebAPI.Services.Impl
 {
@@ -9,10 +11,10 @@ namespace WebAPI.Services.Impl
 
         {
 
-            private IRepository<Person> _repository;
+            private IPersonRepository _repository;
             private readonly PersonConverter _converter;
 
-        public PersonServicesImpl(IRepository<Person> repository)
+        public PersonServicesImpl(IPersonRepository repository)
             {
                 _repository = repository;
                 _converter = new PersonConverter();
@@ -40,11 +42,20 @@ namespace WebAPI.Services.Impl
             var entity = _converter.Parse(person);
             entity = _repository.Update(entity);
             return _converter.Parse(entity);
-        }
+            }
             public void Delete(long id)
             {
                 _repository.Delete(id);
             }
+
+          public PersonDTO Disable(long id)
+          {
+            
+            var entity = _repository.Disable(id);
+                return entity?.Adapt<PersonDTO>();
+            
+          }
+
         }
 
     }

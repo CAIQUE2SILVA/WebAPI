@@ -10,8 +10,8 @@ namespace WebAPI.Configurantions
         {
             return builder.AddMvcOptions(static options =>
             {
-                options.RespectBrowserAcceptHeader = true;
-                options.ReturnHttpNotAcceptable = true;
+                options.RespectBrowserAcceptHeader = false;
+                options.ReturnHttpNotAcceptable = false;
                 options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml"));
                 options.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json"));
 

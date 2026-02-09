@@ -93,5 +93,21 @@ namespace WebAPI.Controllers.V1
             return NoContent();
         }
 
+        [HttpPatch("id")]
+        [ProducesResponseType(200, Type = typeof(PersonDTO))]
+        [ProducesResponseType(400)]
+
+        public IActionResult Disable(long id)
+        {
+            _logger.LogInformation("Disabling person With ID {id}", id);
+            var disabledPerson = _personServices.Disable(id);
+            if (disabledPerson == null)
+            {
+                _logger.LogError("Failed to disable person with ID {id}",id);
+                return NotFound();
+            }
+            _logger.LogDebug("Peson with ID {id} disable", id);
+            return Ok(disabledPerson);
+        }
     }
 }

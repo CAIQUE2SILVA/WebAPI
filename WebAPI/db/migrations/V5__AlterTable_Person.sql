@@ -1,0 +1,3 @@
+
+AlTER TABLE dbo.person
+ADD enable BIT NOT NULL DEFAULT 1;
