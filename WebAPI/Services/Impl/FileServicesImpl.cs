@@ -45,7 +45,7 @@ namespace WebAPI.Services.Impl
             {
                 File = documentName,
                 FileType = fileExtension,
-                FileUrl = $"{baseUrl}/api/file/v1/downloadFile{documentName}"
+                FileUrl = $"{baseUrl}/api/file/v1/downloadFile/{documentName}"
             };
             using (var stream = new FileStream(destination, FileMode.Create))
              
@@ -63,5 +63,6 @@ namespace WebAPI.Services.Impl
             }
             return results;
         }
+
     }
 }
