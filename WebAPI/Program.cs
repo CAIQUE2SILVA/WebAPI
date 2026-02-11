@@ -4,6 +4,8 @@ using WebAPI.Services.Impl;
 using WebAPI.Repositorys.Impl;
 using WebAPI.Repositorys;
 using WebAPI.Hypermedia.Filters;
+using WebAPI.Files.Importers.Impl;
+using WebAPI.Files.Importers.Factory;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +36,10 @@ builder.Services.AddEvolveConfiguration(builder.Configuration, builder.Environme
 
 builder.Services.AddScoped<IPersonServices, PersonServicesImpl>();
 builder.Services.AddScoped<IBookServices, BookSevicesImpl>();
+
+builder.Services.AddScoped<CsvImporter>();
+builder.Services.AddScoped<ExcelImporter>();
+builder.Services.AddScoped<FileImporterFactory>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IFileServices, FileServicesImpl>();

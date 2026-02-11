@@ -11,5 +11,8 @@ namespace WebAPI.Services
         void Delete(long id);
 
         PersonDTO Disable(long id);
+
+        Task<List<PersonDTO>> MassCreationAsync(IFormFile file);
     }
+
 }

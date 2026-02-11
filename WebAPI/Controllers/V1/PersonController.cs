@@ -109,5 +109,31 @@ namespace WebAPI.Controllers.V1
             _logger.LogDebug("Peson with ID {id} disable", id);
             return Ok(disabledPerson);
         }
+
+        [HttpPost("massCreation")]
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(200, Type = typeof(List<PersonDTO>))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+
+        public async Task<IActionResult> MassCreation([FromForm] FileUploadDTO input)
+        {
+            if (input.File == null || input.File.Length == 0 )
+            {
+                _logger.LogWarning("No file uploaded for mass creation");
+                return BadRequest("No file uploaded");
+            }
+            _logger.LogInformation("Starting mass creation of persons from file {FileName}", input.File);
+
+            var persons = await _personServices.MassCreationAsync(input.File);
+
+            if (persons == null || !persons.Any())
+            {
+                _logger.LogWarning("No valid person data found in the uploaded file {FileName}", input.File);
+                return NoContent();
+            }
+            _logger.LogInformation("Mass creation completed successfully with {Count} persons created from file {FileName}", persons.Count, input.File);
+            return Ok(persons);
+        }
     }
 }
