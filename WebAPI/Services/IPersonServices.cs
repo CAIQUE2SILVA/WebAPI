@@ -1,4 +1,5 @@
-﻿using WebAPI.Data.DTO.V1;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebAPI.Data.DTO.V1;
 
 namespace WebAPI.Services
 {
@@ -13,6 +14,8 @@ namespace WebAPI.Services
         PersonDTO Disable(long id);
 
         Task<List<PersonDTO>> MassCreationAsync(IFormFile file);
+
+        FileContentResult ExportPage(int page, int pageSize, string sortDirection, string acceptHeader,  string name);
     }
 
 }

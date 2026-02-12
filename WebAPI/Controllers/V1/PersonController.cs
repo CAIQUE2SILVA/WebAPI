@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using WebAPI.Data.DTO.V1;
+using WebAPI.Files.Importers.Factory;
 using WebAPI.Services;
 
 namespace WebAPI.Controllers.V1
@@ -23,7 +24,7 @@ namespace WebAPI.Controllers.V1
             _logger = logger;
         }
         [HttpGet]
-        [ProducesResponseType(200,Type = typeof(List<PersonDTO>))]
+        [ProducesResponseType(200, Type = typeof(List<PersonDTO>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
 
@@ -38,7 +39,7 @@ namespace WebAPI.Controllers.V1
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         public IActionResult Get(long id)
-        {            
+        {
             _logger.LogInformation("Getting person with id {Id}", id);
             var person = _personServices.FindById(id);
             if (person == null)
@@ -55,7 +56,7 @@ namespace WebAPI.Controllers.V1
         [ProducesResponseType(401)]
         public IActionResult Post([FromBody] PersonDTO person)
         {
-            _logger.LogInformation("Creating a new person" );
+            _logger.LogInformation("Creating a new person");
             var createdPerson = _personServices.Create(person);
             if (createdPerson == null)
             {
@@ -103,7 +104,7 @@ namespace WebAPI.Controllers.V1
             var disabledPerson = _personServices.Disable(id);
             if (disabledPerson == null)
             {
-                _logger.LogError("Failed to disable person with ID {id}",id);
+                _logger.LogError("Failed to disable person with ID {id}", id);
                 return NotFound();
             }
             _logger.LogDebug("Peson with ID {id} disable", id);
@@ -118,7 +119,7 @@ namespace WebAPI.Controllers.V1
 
         public async Task<IActionResult> MassCreation([FromForm] FileUploadDTO input)
         {
-            if (input.File == null || input.File.Length == 0 )
+            if (input.File == null || input.File.Length == 0)
             {
                 _logger.LogWarning("No file uploaded for mass creation");
                 return BadRequest("No file uploaded");
@@ -134,6 +135,37 @@ namespace WebAPI.Controllers.V1
             }
             _logger.LogInformation("Mass creation completed successfully with {Count} persons created from file {FileName}", persons.Count, input.File);
             return Ok(persons);
+        }
+
+        [HttpGet("exportPage/ {sortDirection}/{pageSize}/{page}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(415)]
+        [Produces(MediaTypes.ApplicationExcel, MediaTypes.AplicationCsv)]
+
+        public IActionResult ExportPage(string sortDirection, int pageSize, int page, [FromQuery] string name = "")
+        {
+            var acceptHeader = Request.Headers["Accept"].ToString();
+            if (string.IsNullOrWhiteSpace(acceptHeader))
+            {
+                return BadRequest("Accept header is required");
+            }
+            try
+            {
+                var fileContent = _personServices.ExportPage(page, pageSize, sortDirection, acceptHeader, name);
+                return fileContent;
+            }
+            catch (NotSupportedException ex)
+            {
+                _logger.LogError(ex, "Export failed due to unsupported media type: {MediaType}", acceptHeader);
+                return StatusCode(StatusCodes.Status415UnsupportedMediaType, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred during export");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred during export");
+            }
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using ClosedXML.Excel;
 using Mapster;
+using Microsoft.AspNetCore.Mvc;
 using WebAPI.Data.Converter.Impl;
 using WebAPI.Data.DTO.V1;
+using WebAPI.Files.Exporters.Factory;
 using WebAPI.Files.Importers.Factory;
 using WebAPI.Model;
 using WebAPI.Repositorys;
@@ -15,18 +17,22 @@ namespace WebAPI.Services.Impl
 
         private IPersonRepository _repository;
         private readonly FileImporterFactory _fileImporterFactory;
+        private readonly FileExporterFactory _fileExporterFactory;
         private readonly ILogger<PersonServicesImpl> _logger;
         private readonly PersonConverter _converter;
 
         public PersonServicesImpl(
             IPersonRepository repository ,
             FileImporterFactory fileimporterFactory,
+            PersonConverter converter,
+            FileExporterFactory fileExporterFactory,
             ILogger<PersonServicesImpl> logger
             )
         {
             _repository = repository;
             _fileImporterFactory = fileimporterFactory;
-            _converter = new PersonConverter();
+            _fileExporterFactory = fileExporterFactory;
+            _converter = converter;
             _logger = logger;
         }
 
@@ -90,6 +96,28 @@ namespace WebAPI.Services.Impl
                 _logger.LogError("Failed to import file: {FileName}", fileName);
                 throw ;
             }
+        }
+
+        public FileContentResult ExportPage(int page, int pageSize, string sortDirection, string acceptHeader, string name)
+        {
+            _logger.LogInformation("Exporting page {Page} with page size {PageSize}, sort direction {SortDirection}, accept header {AcceptHeader}, and name filter {Name}"
+                , page, pageSize, sortDirection, acceptHeader, name);
+            var content = _repository.FindWithPagedSearch(page, pageSize, sortDirection, name);
+
+            try
+            {
+                var exporter = _fileExporterFactory.GetExporter(acceptHeader);
+                var people = content.Adapt<List<PersonDTO>>();
+
+                return exporter.ExportToFile<PersonDTO>(people);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to export file for page {Page} with page size {PageSize}, sort direction {SortDirection}, accept header {AcceptHeader}, and name filter {Name}"
+                    , page, pageSize, sortDirection, acceptHeader, name);
+                throw;
+            }
+
         }
     }   
 

@@ -6,6 +6,8 @@ using WebAPI.Repositorys;
 using WebAPI.Hypermedia.Filters;
 using WebAPI.Files.Importers.Impl;
 using WebAPI.Files.Importers.Factory;
+using WebAPI.Files.Exporters.Impl;
+using WebAPI.Files.Exporters.Factory;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +42,10 @@ builder.Services.AddScoped<IBookServices, BookSevicesImpl>();
 builder.Services.AddScoped<CsvImporter>();
 builder.Services.AddScoped<ExcelImporter>();
 builder.Services.AddScoped<FileImporterFactory>();
+
+builder.Services.AddScoped<CsvExporter>();
+builder.Services.AddScoped<ExcelExporter>();
+builder.Services.AddScoped<FileExporterFactory>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IFileServices, FileServicesImpl>();

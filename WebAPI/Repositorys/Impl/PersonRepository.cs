@@ -14,5 +14,10 @@ namespace WebAPI.Repositorys.Impl
             _context.SaveChanges();
             return person;
         }
+
+        public List<Person> FindWithPagedSearch(string page, string pageSize, string sortDirection, string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
